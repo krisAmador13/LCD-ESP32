@@ -46,11 +46,11 @@ void setup() {
 }
 
 void loop() {
-  // Retardo para estabilidad
+  // Incluimos las funciones para proyectar en la LCD y leer los potenciómetros 
   Pot_Lect();
   LCD_proyect();
 }
-
+//Establecemos la función de suma para el contador
 void IRAM_ATTR bot_suma_ISR(void) {
   unsigned long currentTime = millis();
   if (currentTime - bot_T_lastlL > t_rebote) {
@@ -64,7 +64,7 @@ void IRAM_ATTR bot_suma_ISR(void) {
     bot_T_lastlL = currentTime;
   }
 }
-
+//Establecemos la función de resta para el contador 
 void IRAM_ATTR bot_resta_ISR(void) {
   unsigned long currentTime = millis();
   if (currentTime - bot_T_lastlL > t_rebote) {
@@ -78,7 +78,7 @@ void IRAM_ATTR bot_resta_ISR(void) {
     bot_T_lastlL = currentTime;
   }
 }
-
+//Empleamos ADC para leer los valores analógicos de los potenciómetro y luego usamos la función itoa para convertirlos en caracteres 
 void Pot_Lect(void){
   valorp1 = analogRead(P_1);
   valorp2 = analogRead(P_2);
@@ -91,7 +91,7 @@ void Pot_Lect(void){
   Serial.println("\n");
   Serial.println(voltaje2);
 }
-
+//Establecemos lo que se imprimirá en la pantalla 
 void LCD_proyect(void){
   itoa(contador,valor_contador,10);
   lcd.clear();
