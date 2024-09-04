@@ -1,42 +1,46 @@
+//Se incluyen las librerias necesarias para ejecutar el programa 
 #include <LiquidCrystal_I2C.h>
 #include <Arduino.h>
 
-LiquidCrystal_I2C lcd(0x27, 16, 2); // Crear un objeto LCD (dirección pantalla, Tamaño x, Tamaño y)
+LiquidCrystal_I2C lcd(0x27, 16, 2); // Crear un objeto LCD (dirección pantalla, Tamaño x, Tamaño y)//Definmos el uso de una pantalla LCD I2C de 16x2
+//Definimos los pines de entradas 
 #define P_1 12
 #define P_2 14
 #define bot_suma 32
 #define bot_resta 33
-
+//Definimos las varibales globales 
 int contador = 0;
 int valorp1 = 0;
 int valorp2 = 0;
 char voltaje1[5]; // Array de caracteres para almacenar voltaje como cadena
 char voltaje2[5]; // Array de caracteres para almacenar voltaje como cadena
 char valor_contador[5];//Array de caracteres para lamacenar el valor de contador como cadena 
-
+//Definimos los prototipos de función 
 void IRAM_ATTR bot_resta_ISR();
 void IRAM_ATTR bot_suma_ISR();
 void Pot_Lect();
 void LCD_proyect();
-
+//Definimos la interrupción y las variables competentes a la misma
 portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
 unsigned long bot_T_lastlL = 0;
 unsigned long t_rebote = 5;
 volatile int lectura = 0;
 
 void setup() {
+//Iniciamos comunicación serial 
   Serial.begin(115200);
+//Establecemos si los pines son entradas o salidas 
   pinMode(P_1, INPUT);
   pinMode(P_2, INPUT);
   pinMode(bot_suma, INPUT_PULLUP);
   pinMode(bot_resta, INPUT_PULLUP);
-  
+  //Comprobamos funcionamiento de la LCD con mensaje de bienvenidqa
   lcd.init();
   lcd.backlight();
   lcd.begin(16, 2); // Configuración correcta de LCD (16x2)
   lcd.print("BIENVENIDOS");
   delay(2000);
-  
+  //Inicializamos la interrupción 
   attachInterrupt(digitalPinToInterrupt(bot_suma), bot_suma_ISR, RISING);
   attachInterrupt(digitalPinToInterrupt(bot_resta), bot_resta_ISR, RISING);
 }
